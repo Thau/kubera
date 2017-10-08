@@ -5,7 +5,9 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/data.json "0.2.6"]
                  [clojurewerkz/quartzite "2.0.0"]
-                 [clj-http "3.7.0"]]
+                 [clj-http "3.7.0"]
+                 [environ/environ.core "0.3.1"]
+                 [org.clojure/tools.logging "0.4.0"]]
   :main ^:skip-aot kubera-clojure.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

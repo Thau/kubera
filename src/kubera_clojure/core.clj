@@ -8,37 +8,33 @@
             [clojurewerkz.quartzite.jobs :as jobs]
             [clojurewerkz.quartzite.triggers :as triggers]
             [clojurewerkz.quartzite.schedule.cron :as cron]
-            )
-  (:import (java.time.format DateTimeFormatter)
-           (java.time LocalDateTime)))
+            [environ.core :refer [env]]))
 
 (defn databases
   []
-  (-> (System/getenv "DATABASES")
-      (string/split #" ")
-      ))
+  (string/split (:databases env) #" "))
 
 (jobs/defjob DumpJob
-             [ctx]
-             (let [filenames (map databases/dump! (databases))]
-               (run! dropbox/upload-file filenames)
-               (run! io/delete-file filenames)
-               ))
+  [ctx]
+  (let [filenames (map databases/dump! (databases))]
+    (run! dropbox/upload-file filenames)
+    (run! io/delete-file filenames)))
 
 (defn scheduler
   []
-  (-> (qs/initialize) qs/start))
+  (qs/start (qs/initialize)))
 
 (def job
   (jobs/build (jobs/of-type DumpJob)))
 
 (defn schedule
   []
-  (cron/schedule (cron/cron-schedule (System/getenv "SCHEDULE"))))
+  (cron/schedule (cron/cron-schedule (:schedule env))))
 
 (defn trigger
   []
-  (triggers/build (triggers/start-now) (triggers/with-schedule (schedule)) ))
+  (triggers/build (triggers/start-now)
+                  (triggers/with-schedule (schedule))))
 
 (defn -main
   [& args]
