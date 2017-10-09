@@ -1,0 +1,20 @@
+<configuration scan="true" scanPeriod="10 seconds">
+
+    <property scope="context" name="COLORIZER_COLORS" value="boldred@white,yellow@black,green@,blue@,cyan@" />
+    <conversionRule conversionWord="colorize" converterClass="org.tuxdude.logback.extensions.LogColorizer" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %logger : %colorize(%msg) %n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>
+

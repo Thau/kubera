@@ -1,6 +1,7 @@
 (ns kubera-clojure.databases
   (:require [clojure.java.shell :as shell]
-            [clojure.string :as string])
+            [clojure.string :as string]
+            [clojure.tools.logging :refer [info]])
   (:import (java.time.format DateTimeFormatter)
            (java.time LocalDateTime)))
 
@@ -10,7 +11,7 @@
   "Run pg_dump and return the resulting dump"
   [db-name]
   (-> db-name
-      (run-pgdump)
+      run-pgdump
       (get :out)))
 
 (defn- db-name-from-url
@@ -31,11 +32,8 @@
 (defn dump!
   "Dump a database based on a URL"
   [db-url]
-  (do
-    (println (str "Dumping " db-url))
-    (let [filename (filename (db-name-from-url db-url))]
-      (spit filename (pg_dump! db-url))
-      filename)
-    )
-  )
+  (info "Dumping" db-url)
+  (let [filename (filename (db-name-from-url db-url))]
+    (spit filename (pg_dump! db-url))
+    filename))
 
