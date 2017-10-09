@@ -7,7 +7,9 @@
                  [clojurewerkz/quartzite "2.0.0"]
                  [clj-http "3.7.0"]
                  [environ/environ.core "0.3.1"]
-                 [org.clojure/tools.logging "0.4.0"]]
+                 [org.clojure/tools.logging "0.4.0"]
+								 [ch.qos.logback/logback-classic "1.2.3"]
+								 [org.tuxdude.logback.extensions/logback-colorizer "1.0.1"]]
   :main ^:skip-aot kubera-clojure.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
